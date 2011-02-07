@@ -9,17 +9,6 @@ from datetime import datetime
 #This class connects the backend with the frontend by accessing data and filling the templates
 class Board:
     def __init__(self,board_name="FroSci"):
-        userID = 'admin'
-        pwd = 'hackcu11'
-        host= 'flame.mongohq.com'
-        port = 27039
-        dbName = 'posts_database'
-        connection=Connection(host,port)
-        #name of database
-        db = connection[dbName]
-        db.authenticate(userID, pwd)
-
-        self.courses=list(db.courses.find())
         self.board_name = board_name
         #Connect and load posts
         self.posts = p.get_posts(self.board_name)
@@ -34,6 +23,18 @@ class Board:
         self.homepage_template = homepage_t.read()
 
     def index(self, message=None):
+        userID = 'admin'
+        pwd = 'hackcu11'
+        host= 'flame.mongohq.com'
+        port = 27039
+        dbName = 'posts_database'
+        connection=Connection(host,port)
+        #name of database
+        db = connection[dbName]
+        db.authenticate(userID, pwd)
+
+        self.courses=list(db.courses.find())
+
         name_space={"courses" : self.courses}
 
         return str(Template(self.homepage_template, name_space))
