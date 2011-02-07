@@ -13,6 +13,7 @@ class Board:
         #Connect and load posts
         self.posts = p.get_posts(self.board_name)
 
+        self.get_database()
         #load templates
         index_t = open('templates/index.tmpl', 'r')
         expand_t = open('templates/expand.tmpl', 'r')
@@ -22,24 +23,34 @@ class Board:
         self.index_template = index_t.read()
         self.homepage_template = homepage_t.read()
 
-    def index(self, message=None):
-        userID = 'admin'
-        pwd = 'hackcu11'
+    def get_database(self):
         host= 'flame.mongohq.com'
         port = 27039
         dbName = 'posts_database'
         connection=Connection(host,port)
         #name of database
-        db = connection[dbName]
-        db.authenticate(userID, pwd)
+        self.db = connection[dbName]
+       
 
-        self.courses=list(db.courses.find())
+    def index(self, message=None):
+        userID = 'admin'
+        pwd = 'hackcu11'
+        self.db.authenticate(userID, pwd)
+
+        self.courses=list(self.db.courses.find())
 
         name_space={"courses" : self.courses}
 
         return str(Template(self.homepage_template, name_space))
-#        return "whatever"
     index.exposed = True
+
+
+    def in_course_list(self,board):
+        userID = 'admin'
+        pwd = 'hackcu11'
+        self.db.authenticate(userID, pwd)
+
+        return self.db.courses.find_one({"title":board})
 
 
     def course(self, board ,message=None):
@@ -54,6 +65,8 @@ class Board:
         #Connect and load posts
                 self.posts = p.get_posts(self.board_name)
 
+        if not self.in_course_list(board):
+            return "whatever."
         self.board_name = board
 
         self.posts = p.get_posts(self.board_name)
