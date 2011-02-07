@@ -1,0 +1,45 @@
+#container
+{
+	margin: 0 auto;
+	width: 600px;
+	background:#fff;
+}
+
+#header
+{
+	background:#ccc;
+	padding: 20px;
+}
+
+#header h1 { margin: 0; }
+
+
+#content
+{
+	clear: left;
+	padding: 20px;
+}
+
+#content h2
+{
+	color:#000;
+	font-size: 160%;
+	margin: 0 0 .5em;
+}
+
+#footer
+{
+	background:#ccc;
+	text-align: right;
+	padding: 20px;
+	height: 1%;
+}
+
+ol.courses { list-style: none; }
+.courses li {
+  padding: 10px;
+  border: 1px solid #454545;
+  background: #E7E7E7;
+  width: 80%;
+  margin: 10px 0 10px 5%;
+}

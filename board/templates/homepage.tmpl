@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>CUBoards</title>
+		<link type="text/css" href="/static/jquery-ui-1.8.9.customFRONT.css" rel="stylesheet" />	
+		<link type="text/css" href="/static/application.css" rel="stylesheet" />	
+    <link type="text/css" href="/static/homepage.css" rel="stylesheet" />
+	</head>
+<body>
+  <div id="header">
+    <h1>CUBoard</h1>
+    <p>A super fun place to chat with your friends during class (because there's nothing better to do).</p>
+  </div>
+
+  <div id="content">
+  <ol class="courses">
+  #for $i in range($len($courses)):
+	  <li id="#${courses}_${i}">
+	    #set $titre = "course/"+$courses[$i]['title']
+	    <a href=$titre>
+      $courses[$i]["title"]
+            </a>
+  <span class="tab">
+    #set $timing=""
+#for $key in iter($courses[$i]["hours"]):
+    #set $timing=$timing+$key+": "+str($courses[$i]["hours"][$key][0])+"-"+str($courses[$i]["hours"][$key][1])+"<br />"
+#end for
+
+    $timing
+
+  </span>
+    </li>
+  #end for
+  </ol>
+    
+  </div>
+</body>
+</html>

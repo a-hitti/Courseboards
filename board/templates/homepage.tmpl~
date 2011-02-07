@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>CUBoards</title>
+		<link type="text/css" href="/static/jquery-ui-1.8.9.customFRONT.css" rel="stylesheet" />	
+		<link type="text/css" href="/static/application.css" rel="stylesheet" />	
+    <link type="text/css" href="/static/homepage.css" rel="stylesheet" />
+	</head>
+<body>
+  <div id="header">
+    <h1>CUBoard</h1>
+    <p>A super fun place to chat with your friends during class (because there's nothing better to do).</p>
+  </div>
+
+  <div id="content">
+   <div id="$post.post_id" class="post">
+  <ol class="courses">
+  #for $course in $courses:
+	  <li id="#${post}_${i}">
+      $course["title"]
+  <span class="tab">
+      $course["hours"]
+  </span>
+    </li>
+  #end for
+  </ol>
+  </div>
+    
+  </div>
+</body>
+</html>
