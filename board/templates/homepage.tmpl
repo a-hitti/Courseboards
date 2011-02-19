@@ -22,10 +22,7 @@
       $courses[$i]["title"]
             </a>
   <span class="tab">
-    #set $timing=""
-#for $key in iter($courses[$i]["hours"]):
-    #set $timing=$timing+$key+": "+str($courses[$i]["hours"][$key][0])+"-"+str($courses[$i]["hours"][$key][1])+"<br />"
-#end for
+    #set $timing=str($courses[$i]["hours"])+"-"+str($courses[$i]["hours"])+"<br />"
 
     $timing
 
