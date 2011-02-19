@@ -37,8 +37,8 @@ class Board:
         pwd = 'hackcu11'
         self.db.authenticate(userID, pwd)
         tmp = datetime.now()
-#        self.courses = list(self.db.courses.find({"weekdays":tmp.weekday(), "hours" : {"$lte" : tmp.hour*100+tmp.minute,"$gte" : tmp.hour*100+tmp.minute}}))
-        self.courses = list(self.db.courses.find())
+        self.courses = list(self.db.courses.find({"weekdays":tmp.weekday(), "hours" : {"$lte" : tmp.hour*100+tmp.minute,"$gte" : tmp.hour*100+tmp.minute}}))
+#        self.courses = list(self.db.courses.find())
 
         name_space={"courses" : self.courses}
 
