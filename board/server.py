@@ -8,7 +8,9 @@ base = os.path.dirname(os.path.abspath(__file__))
 site_conf = \
     {'server.socket_host': '127.0.0.1',
      'server.socket_port': 80,
+     'error_page.404': os.path.join(base, "static/error.html")
     }
+
 
 cherrypy.config.update(site_conf)
 
@@ -29,10 +31,6 @@ board_conf = \
                                            'js':'application/javascript',}
          }
     }
-
-def error_page_404(status, message, traceback, version):
-    return "Error %s - Well, I'm very sorry but you haven't paid!" % status
-cherrypy.config.update({'error_page.402': error_page_404})
 
 
 
