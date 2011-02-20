@@ -25,10 +25,16 @@ board_conf = \
         },
     '/static':
         {'tools.staticdir.on':True,
-        'tools.staticdir.dir':os.path.join(base, 'static'),
+#         'tools.staticfile.on':True,
+#         'tools.staticfile.filename':os.path.join(base,'static/favicon.ico'),
+         'tools.staticdir.dir':os.path.join(base, 'static'),
          'tools.staticdir.content_types': {'png': 'image/png',
                                            'css': 'text/css',
                                            'js':'application/javascript',}
+         },
+    '/favicon.ico':
+        {'tools.staticfile.on':True,
+         'tools.staticfile.filename':os.path.join(base,'favicon.ico'),
          }
     }
 
