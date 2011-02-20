@@ -30,5 +30,10 @@ board_conf = \
          }
     }
 
+def error_page_404(status, message, traceback, version):
+    return "Error %s - Well, I'm very sorry but you haven't paid!" % status
+cherrypy.config.update({'error_page.402': error_page_404})
+
+
 
 cherrypy.quickstart(Board("FroSci"), '/', config=board_conf)
