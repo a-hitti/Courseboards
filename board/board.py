@@ -70,7 +70,7 @@ class Board:
         cur_time = datetime.now()
         return self.db.courses.find_one({"title":board,"weekdays":cur_time.weekday(), "hours" : {"$lte" : cur_time.hour*100+cur_time.minute,"$gte" : cur_time.hour*100+cur_time.minute}})
 
-    def course(self,board):
+    def course(self,board,message=None):
         if cherrypy.request.method == 'POST':
             if not message:
                 print('No message received')
@@ -87,17 +87,16 @@ class Board:
             pass
         self.board_name = board
 
-        self.posts = p.get_posts(board)
 
-        name_space = {'posts':self.posts,'course':board}
+        name_space = {'posts':p.get_posts(board),'course':board}
         return str(Template(self.index_template, name_space))
     course.exposed = True
     
-    def expand(self, post_id, message=None):
-        if not self.in_course_list(self.board_name):
+    def expand(self,board,post_id, message=None):
+        if not self.in_course_list(board):
 #            return "whatever."
             pass
-        post = Post(self.board_name, post_id=post_id)
+        post = Post(board, post_id=post_id)
         if cherrypy.request.method == 'POST':
             if not message:
                 print('Message was empty')
@@ -106,10 +105,10 @@ class Board:
                 post.add_reply(message)
         post.update()
         #display the post and responses for post_id
-        post = Post(self.board_name, post_id=post_id)
+        post = Post(board, post_id=post_id)
         #Render the page
            
-        name_space = {'post':post}
+        name_space = {'post':post,'board':board}
         return str(Template(self.expand_template, name_space))
     expand.exposed = True
 
