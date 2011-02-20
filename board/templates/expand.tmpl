@@ -17,7 +17,6 @@ rel="stylesheet" />
     <h1>CourseBoards</h1>
     <p>A super fun place to chat with your friends during class!</p>
   </div>
-
 <div id="$post.post_id" class="post">
 	<div class="op">
 		$post.message
@@ -37,10 +36,19 @@ rel="stylesheet" />
 <div id="content">
 <form action="" method="post">
     <input type="text" name="message" id="" />
-    <input type="submit" value="submit" />
+    <input type="submit" value="Reply" />
 </form>
 </div>
-  <a href="../../suggest">Suggest a New Class</a>
+
+<form action="../../course/$course/">
+<input type="submit" value="Go back!">
+</form>
+
+
+  <br />
+<form action="../../suggest/">
+<input type="submit" value="Suggest a new class!">
+</form>
 
 </body>
 </html>

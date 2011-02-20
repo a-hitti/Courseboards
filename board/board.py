@@ -108,7 +108,7 @@ class Board:
         post = Post(board, post_id=post_id)
         #Render the page
            
-        name_space = {'post':post,'board':board}
+        name_space = {'post':post,'course':board}
         return str(Template(self.expand_template, name_space))
     expand.exposed = True
 
