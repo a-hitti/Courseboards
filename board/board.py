@@ -37,8 +37,8 @@ class Board:
         pwd = 'hackcu11'
         self.db.authenticate(userID, pwd)
         tmp = datetime.now()
-        self.courses = list(self.db.courses.find({"weekdays":tmp.weekday(), "hours" : {"$lte" : tmp.hour*100+tmp.minute,"$gte" : tmp.hour*100+tmp.minute}}))
-#        self.courses = list(self.db.courses.find())
+#        self.courses = list(self.db.courses.find({"weekdays":tmp.weekday(), "hours" : {"$lte" : tmp.hour*100+tmp.minute,"$gte" : tmp.hour*100+tmp.minute}}))
+        self.courses = list(self.db.courses.find())
 
         name_space={"courses" : self.courses}
 
@@ -53,7 +53,6 @@ class Board:
         cur_time = datetime.now()
         return self.db.courses.find_one({"title":board,"weekdays":cur_time.weekday(), "hours" : {"$lte" : cur_time.hour*100+cur_time.minute,"$gte" : cur_time.hour*100+cur_time.minute}})
 
-
     def course(self, board ,message=None):
         if cherrypy.request.method == 'POST':
             if not message:
@@ -67,7 +66,8 @@ class Board:
                 self.posts = p.get_posts(self.board_name)
 
         if not self.in_course_list(board):
-            return "whatever."
+#            return "whatever."
+            pass
         self.board_name = board
 
         self.posts = p.get_posts(self.board_name)
@@ -77,8 +77,9 @@ class Board:
     course.exposed = True
     
     def expand(self, post_id, message=None):
-        if not self.in_course_list(board):
-            return "whatever."
+        if not self.in_course_list(self.board_name):
+#            return "whatever."
+            pass
         post = Post(self.board_name, post_id=post_id)
         if cherrypy.request.method == 'POST':
             if not message:
