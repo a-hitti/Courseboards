@@ -25,7 +25,7 @@ board_conf = \
         },
     '/static':
         {'tools.staticdir.on':True,
-        'tools.staticdir.dir':os.path.join(base, 'static'),
+         'tools.staticdir.dir':os.path.join(base, 'static'),
          'tools.staticdir.content_types': {'png': 'image/png',
                                            'css': 'text/css',
                                            'js':'application/javascript',}
