@@ -1,4 +1,5 @@
 import cherrypy
+import cgi #For html escaping
 import pymongo
 from pymongo import Connection
 from Cheetah.Template import Template
@@ -18,10 +19,12 @@ class Board:
         index_t = open('templates/index.tmpl', 'r')
         expand_t = open('templates/expand.tmpl', 'r')
         homepage_t = open('templates/homepage.tmpl', 'r')
+        suggest_t = open('templates/suggest.tmpl', 'r')
         #string-ize
         self.expand_template = expand_t.read()
         self.index_template = index_t.read()
         self.homepage_template = homepage_t.read()
+        self.suggest_template = suggest_t.read()
 
     def get_database(self):
         host= 'flame.mongohq.com'
@@ -30,7 +33,21 @@ class Board:
         connection=Connection(host,port)
         #name of database
         self.db = connection[dbName]
-       
+
+
+    def suggest(self,message=None,time=None,room=None):
+        extras = ""
+        if cherrypy.request.method == 'POST':
+            if not message:
+                extras="No class name received."
+            else:
+                #adds a suggestion
+                self.add_suggestion(message,time,room)
+                extras="Thanks for your suggestion!"
+
+        name_space = {'extra_text':extras}
+        return str(Template(self.suggest_template, name_space))
+    suggest.exposed = True
 
     def index(self, message=None):
         userID = 'admin'
@@ -53,7 +70,7 @@ class Board:
         cur_time = datetime.now()
         return self.db.courses.find_one({"title":board,"weekdays":cur_time.weekday(), "hours" : {"$lte" : cur_time.hour*100+cur_time.minute,"$gte" : cur_time.hour*100+cur_time.minute}})
 
-    def course(self, board ,message=None):
+    def course(self,board):
         if cherrypy.request.method == 'POST':
             if not message:
                 print('No message received')
@@ -70,9 +87,9 @@ class Board:
             pass
         self.board_name = board
 
-        self.posts = p.get_posts(self.board_name)
+        self.posts = p.get_posts(board)
 
-        name_space = {'posts':self.posts}
+        name_space = {'posts':self.posts,'course':board}
         return str(Template(self.index_template, name_space))
     course.exposed = True
     
@@ -98,4 +115,10 @@ class Board:
 
     def add_post(self,message):
         post = Post(self.board_name, message=message)
-        
+
+    def add_suggestion(self,message,time,room):
+        userID = 'admin'
+        pwd = 'hackcu11'
+        self.db.authenticate(userID, pwd)
+        suggests=self.db.suggestions
+        suggests.insert({'class_name':cgi.escape(message),'time':cgi.escape(time),'room':cgi.escape(room)})
