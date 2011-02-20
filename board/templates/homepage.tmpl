@@ -9,8 +9,8 @@
 	</head>
 <body>
   <div id="header">
-    <h1>CUBoard</h1>
-    <p>A super fun place to chat with your friends during class (because there's nothing better to do).</p>
+    <h1>CourseBoards</h1>
+    <p>A super fun place to chat with your friends during class. </p>
   </div>
 
   <div id="content">
@@ -30,7 +30,9 @@
     </li>
   #end for
   </ol>
-    
+   #if not $courses:
+   <center><p>There are no classes in session at this time. Come back soon!</p></center>
+   #end if
   </div>
 </body>
 </html>
