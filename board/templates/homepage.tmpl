@@ -22,7 +22,26 @@
       $courses[$i]["title"]
             </a>
   <span class="tab">
-    #set $timing=str($courses[$i]["hours"][0])+"-"+str($courses[$i]["hours"][1])+"<br />"
+    #set $before_hour = str($courses[$i]["hours"][0] / 100)
+    #set $before_minutes = ($courses[$i]["hours"][0]% 100) 
+    #set $after_hour =  str($courses[$i]["hours"][1]/ 100) 
+    #set $after_minutes =  ($courses[$i]["hours"][1]% 100)
+    #set $zero = "0"
+    #set $zeroafter = "0"
+    
+    #if $before_minutes < 10
+       #set $zero = $zero + str($before_minutes)
+    #else:
+       #set $zero = str($before_minutes)
+    #end if
+
+    #if $after_minutes < 10:
+        #set $zeroafter = $zeroafter + str($after_minutes)
+    #else:
+        #set $zeroafter = str($after_minutes)
+    #end if
+    
+    #set $timing=$before_hour+":"+$zero+"-"+$after_hour+":"+$zeroafter+"<br />"
 
     $timing
 
