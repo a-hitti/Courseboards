@@ -2,7 +2,8 @@ import cherrypy
 import os
 import sys
 from board import Board
-base = os.path.dirname(os.path.abspath(__file__))
+base = os.path.abspath(os.path.dirname(sys.argv[0]))
+print(base)
 
 #Server configuration
 site_conf = \
