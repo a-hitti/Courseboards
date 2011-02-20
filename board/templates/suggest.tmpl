@@ -12,26 +12,10 @@
     <h1>CUBoard</h1>
     <p>A super fun place to chat with your friends during class (because there's nothing better to do).</p>
   </div>
+    <form action="" method="post">
+    <input type="text" name="message" id="" />
+    <input type="submit" value="submit" />
+    </form>
 
-  <div id="content">
-  <ol class="courses">
-  #for $i in range($len($courses)):
-	  <li id="#${courses}_${i}">
-	    #set $titre = "course/"+$courses[$i]['title']
-	    <a href=$titre>
-      $courses[$i]["title"]
-            </a>
-  <span class="tab">
-    #set $timing=str($courses[$i]["hours"])+"-"+str($courses[$i]["hours"])+"<br />"
-
-    $timing
-
-  </span>
-    </li>
-  #end for
-  </ol>
-    
-  </div>
-  <a href="../suggest">Suggest a New Class</a>
 </body>
 </html>
