@@ -1,0 +1,16 @@
+Owner:
+Nakamura, Moses
+Requester:
+Liu, Mark
+
+queries for a list of post objects (limit to 25, based on name, sorted on timestamp)
+
+queries for boards (based on time)
+
+add a reply to a post of a board
+
+insert a post into a database with a message
+
+request a schedule based on board name
+
+make a suggestion
