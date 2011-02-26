@@ -29,7 +29,8 @@ board_conf = \
          'tools.staticdir.dir':os.path.join(base, 'static'),
          'tools.staticdir.content_types': {'png': 'image/png',
                                            'css': 'text/css',
-                                           'js':'application/javascript',}
+                                           'js':'application/javascript',
+                                           'html': 'html',}
          },
     '/favicon.ico':
         {'tools.staticfile.on':True,
