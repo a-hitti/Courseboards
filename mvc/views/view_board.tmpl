@@ -13,7 +13,7 @@ New Thread
 </form>
 #for $p in $sorted_posts
 	<div class="post" id="$p.postnum">
-		$p.message <a href="/view_post/$board.key/$p.postnum"><img class="right" src="/static/images/pencil-24.png" alt="Comment on this thread."></a><br/>
+		$p.message <span class="comment-button"><a href="/view_post/$board.key/$p.postnum"><img src="/static/images/pencil-24.png" alt="Comment on this thread."></a></span><br/>
 		<div class="reply-preview">
 			<ul>
 			#if $len(p.replies) <= 2

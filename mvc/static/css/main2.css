@@ -90,7 +90,7 @@ list-style:none;
 }
 div.post li {
 background: #72A97E;
-background-image:url('/static/images/comment-chat-24.png');
+background-image:url('/static/images/comment-inactive-24.png');
 background-repeat:no-repeat;
 background-position:3px, 3px;
 padding: 3px;

@@ -1,17 +1,34 @@
 a img {
 border:0px;
 }
+a:hover {background-color: #BDDFC9;}
+a:link {color: #445E4E;}
+a:visited {color: #445E4E;}
+a:active {color: black;}
+a:hover {background-color: #BDDFC9;}
+a {text-decoration: none;}
 
-body {
-margin:0;
-padding:0;
-background:#72A97E;
+html,body {
+	margin:0;
+	padding:0;
+	height:100%; /* needed for container min-height */
+	background:#445E4E;
+	
+	font-family:helvetica,sans-serif;
+	color:1A241E;
 }
 
 div#wrapper {
-position:relative;
-height:100%;
-overflow:hidden;
+	position:relative; /* needed for footer positioning*/
+	margin:0 auto; /* center, not in IE5 */
+	width:90%;
+	background:#72A97E;
+	
+	height:auto !important; /* real browsers */
+	height:100%; /* IE6: treaded as min-height*/
+
+	min-height:100%; /* real browsers */
+	overflow:hidden;
 }
 
 div#footer {
@@ -55,12 +72,15 @@ border-radius:3px;
 border: 1px solid #8Bc096;
 background:#83B48E;
 margin:10px;
-padding:5px;
+padding-top:4px;
+padding-left:4px;
+padding-right:20px;
+padding-bottom:8px;
 }
 
-img.right {
-position:absolute;
-left:98%;
+.comment-button {
+position:relative;
+float:right;
 top:-15px;
 z-index:1;
 }
@@ -70,10 +90,50 @@ list-style:none;
 }
 div.post li {
 background: #72A97E;
-background-image:url('/static/images/comment-chat-24.png');
+background-image:url('/static/images/comment-inactive-24.png');
 background-repeat:no-repeat;
 background-position:3px, 3px;
 padding: 3px;
 padding-left: 35px;
 margin-bottom: 10px;
+}
+
+div.message {
+width: 90%;
+border-radius: 3px;
+border: 1px solid #8BC096;
+position:relative;
+left: 20px;
+background-image:url('/static/images/star-24.png');
+background-repeat:no-repeat;
+background-position:3px 2px;
+padding-top:4px;
+padding-left:35px;
+padding-right:20px;
+padding-bottom:8px;
+font-style: italic;
+margin-top: 10px;
+}
+
+
+div.reply {
+width: 90%;
+border-radius: 3px;
+border: 1px solid #8BC096;
+position:relative;
+left: 20px;
+background:#83B48E;
+background-image:url('/static/images/comment-inactive-24.png');
+background-repeat:no-repeat;
+background-position:3px 2px;
+padding-top:4px;
+padding-left:35px;
+padding-right:20px;
+padding-bottom:8px;
+margin-top: 10px;
+}
+
+span.reply-info {
+	font-size: 80%;
+	font-style: italic;
 }
