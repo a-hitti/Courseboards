@@ -16,7 +16,8 @@ Viewing post number $post_num in $board.board_name
 </form>
 	<div class="message">
 		$board.posts[$post_num].message
-	</div>
+	</div><br />
+	$len($board.posts[$post_num].replies) replies:<br/>
 #for $reply in $board.posts[$post_num].replies
 	<div class="reply">
 		$reply['reply-text']
