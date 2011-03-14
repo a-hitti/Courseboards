@@ -1,11 +1,8 @@
-import cherrypy
-import cgi #For html escaping
 import pymongo
+import datetime
 from pymongo import Connection
-from Cheetah.Template import Template
-from post import Post
-import post as p
-from datetime import datetime
+from pymongo.objectid import ObjectId
+from pymongo.errors import OperationFailure
 
 #Establish Connection
 userID = 'admin'
@@ -16,78 +13,94 @@ dbName = 'posts_database'
 
 connection = Connection(host, port)
 db = connection[dbName]
+db.authenticate(userID, pwd)
 
-class Network:
-    def get_database(self):
-        host= 'flame.mongohq.com'
-        port = 27039
-        dbName = 'posts_database'
-        connection=Connection(host,port)
-        #name of database
-        self.db = connection[dbName]
-
-    def add_suggestion(self,message,time,room):
-        userID = 'admin'
-        pwd = 'hackcu11'
-        self.db.authenticate(userID, pwd)
-        suggests=self.db.suggestions
-        suggests.insert({'class_name':cgi.escape(message),'time':cgi.escape(time),'room':cgi.escape(room)})
+def auto_authenticate(f):
+    def wrapper(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except OperationFailure:
+            db.authenticate(userID, pwd)
+            return f(*args, **kwargs)
+    return wrapper
 
 
-    def get_current_boards(self):
-        userID = 'admin'
-        pwd = 'hackcu11'
-        self.db.authenticate(userID, pwd)
-        tmp = datetime.now()
-        self.courses = list(self.db.courses.find({"weekdays":tmp.weekday(), "hours" : {"$lte" : tmp.hour*100+tmp.minute,"$gte" : tmp.hour*100+tmp.minute}}))
-        name_space={"courses" : self.courses}
-        return str(Template(self.homepage_template, name_space))
+#Board Queries
+@auto_authenticate
+def get_boards(current_time=None):
+    import Board
+    if not current_time:
+        board_keys = db.courses.find({}, {'title':1})
+    else:
+        board_keys = db.courses.find(
+            {
+                "weekdays": current_time.weekday(),
+                "hours" : {"$lte" : current_time.hour*100+current_time.minute,"$gte" : current_time.hour*100+current_time.minute},
+             },            
+            {'title':1}
+            )
+    b_keys = [b['title'] for b in board_keys]
+    b_keys = set(b_keys)
+    boards = [Board.Board(key=k) for k in b_keys]
+    return boards
 
-    def request_schedule(self,board):
-        userID = 'admin'
-        pwd = 'hackcu11'
-        self.db.authenticate(userID, pwd)
-        tmp = self.db.courses
-        return suggests.find_one(
-            {'board':board,
-             "weekdays":tmp.weekday(),
-             "hours" : {"$lte" : tmp.hour*100+tmp.minute,"$gte" : tmp.hour*100+tmp.minute}
-             },{"hours":1})["hours"]
+@auto_authenticate
+def get_schedule(board_key):
+    return list(db.courses.find({'title':board_key}, {"title":0, '_id':0}))
 
-    #adds a reply atomicly
-    def add_reply(self,new_reply,author=""):
-        self.timestamp = time.time()
-        self.replies.append({"reply-text":cgi.escape(new_reply),"timestamp":datetime.now(),"replies":[],"author":author})
-        self.collection.update({'_id' : self.post_id},{"$set" : {"replies" :self.replies,"timestamp" : self.timestamp}})
+@auto_authenticate
+def add_post(board_key, post_key):
+    db.posts.update({'_id':ObjectId(post_key)}, {'$set':{'board':board_key}})
 
-    def get_posts(board):
-        userID = 'admin'
-        pwd = 'hackcu11'
-        self.db.authenticate(userID, pwd)
-        posts=self.db.posts
-#        print [str(p['_id']) for p in posts.find({'board':board})] 
-        return [Post(board,post_id=post['_id']) for post in posts.find({'board':board}).sort({'timestamp':-1}).limit(25)]
+#Post queries
+@auto_authenticate
+def create_post(message):
+    timestamp = datetime.datetime.now()
+    pid = db.posts.insert({'timestamp':timestamp, 'replies':[], 'message':message})
+    #Bad things will happen if you remove the next line. I don't know why. Stuff will get desynced.
+    list(db.posts.find({'_id':pid}))
+    return pid
 
-    def add_post(self,message):
-        userID = 'admin'
-        pwd = 'hackcu11'
-        self.db.authenticate(userID, pwd)
-        self.collection=self.db.posts
-        self.board=board
-        if post_id == "":
-            self.timestamp=time.time()
-            self.post_id=self.collection.insert({'message':cgi.escape(message),'board':self.board,'replies':[],'timestamp':self.timestamp,'author':author})
-            tmp=self.collection.find().sort('timestamp')
-            tmp=(list(tmp))
-            if(len(tmp)>num_saved):
-                self.collection.remove({'_id':tmp[0]['_id']})
-            self.replies=[]
-            self.author=author
-        else:
-            #needs ObjectId to string->weird objectid type for mongo
-            dic = self.db.posts.find_one({'_id': ObjectId(post_id) })
-            self.message = dic['message']
-            self.replies = dic['replies']
-            self.post_id = dic['_id']
-            self.author = dic['author']
-        self.min_repls=self.get_mini_replies()
+@auto_authenticate
+def get_posts(board_key):
+    import Post
+    post_ids = db.posts.find({'board':board_key}, {'_id':1}).sort('timestamp', pymongo.DESCENDING).limit(25)
+    posts = [Post.Post(key=k['_id']) for k in post_ids]
+    return posts[::-1]
+
+@auto_authenticate
+def get_message(post_key):
+    query = db.posts.find({'_id': ObjectId(post_key)}, {'message':1})
+    try:
+        query[0]['message']
+    except IndexError:
+        raise Exception(str(post_key) + "??")
+    return query[0]['message']
+
+@auto_authenticate
+def get_replies(post_key):
+    query = db.posts.find({'_id': ObjectId(post_key)}, {'replies':1})
+    return query[0]['replies']
+
+@auto_authenticate
+def format_reply(reply):
+    timestamp = datetime.datetime.now()
+    return {'timestamp':timestamp, 'reply-text':reply}
+
+@auto_authenticate
+def append_reply(post_key, reply):
+    db.posts.update({'_id' : ObjectId(post_key)}, {"$push" : {"replies": reply}})
+    #I don't know why we need to do this... But pymongo will lose data without it.
+    list(db.posts.find({'_id': ObjectId(post_key)}))
+
+@auto_authenticate
+def get_timestamp(post_key):
+    query = db.posts.find({'_id': ObjectId(post_key)}, {'timestamp':1})
+    return query[0]['timestamp']
+
+@auto_authenticate
+def change_timestamp(post_key, timestamp):
+    db.posts.update({'_id': ObjectId(post_key)}, {'$set':{'timestamp':timestamp}})
+    #Sanity check
+    q = db.posts.find({'_id':ObjectId(post_key)})
+    q[0]['timestamp'] == timestamp, 'Timestamps not equal'

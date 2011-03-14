@@ -1,6 +1,7 @@
 from magic import *
 import collections
-import network_queries.Network as db
+import network_queries as db
+from DBList import DBList
 
 #Each Board object is responsible for providing methods to:
     #Give an up-to-date list of all posts
@@ -18,10 +19,9 @@ class Board:
         #Schedule should be a dictionary of Weekday->List of Ints (0 to 24*60)
         self.board_schedule = db.get_schedule(key)
         #Posts should be a list of Post objects
-        self.posts = DBList(db.get_posts(key))
 
-
-
+        def insert_post(post):
+            post_key = post.key
+            db.add_post(key, post_key)
         
-
-    
+        self.posts = DBList(db.get_posts(key), insert_post)

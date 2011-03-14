@@ -1,0 +1,30 @@
+#extends base
+
+#def title
+View Board: $board.board_name
+#end def
+
+#def content
+New Thread
+<form action="/new_post/" method="post">
+	<input type="hidden" name="board_key" value="$board.key" />
+	<input type="text" name="message"/>
+	<input type="submit" value="Submit" />
+</form>
+#for $p in $sorted_posts
+	<div class="post" id="$p.postnum">
+		$p.message <a href="/view_post/$board.key/$p.postnum"><img class="right" src="/static/images/pencil-24.png" alt="Comment on this thread."></a>
+		<div class="reply-preview">
+			#set $r = $p.replies[-3:]
+			<ul>
+			#for $reply in $r
+				<li>
+					$reply['reply-text']
+				</li>
+			#end for
+			</ul>
+		</div>
+
+	</div>
+#end for
+#end def
