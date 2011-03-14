@@ -13,10 +13,22 @@ New Thread
 </form>
 #for $p in $sorted_posts
 	<div class="post" id="$p.postnum">
-		$p.message <a href="/view_post/$board.key/$p.postnum"><img class="right" src="/static/images/pencil-24.png" alt="Comment on this thread."></a>
+		$p.message <a href="/view_post/$board.key/$p.postnum"><img class="right" src="/static/images/pencil-24.png" alt="Comment on this thread."></a><br/>
 		<div class="reply-preview">
-			#set $r = $p.replies[-3:]
 			<ul>
+			#if $len(p.replies) <= 2
+				#set $display_num = $len($p.replies)
+			#else
+				#set $display_num = 3
+			#end if
+			#set $r = $p.replies[-$display_num:]
+			<span class="reply-info">
+			#if $len($p.replies)>=1
+				Latest $len($r)/$len($p.replies) replies:
+			#else
+				No replies.
+			#end if
+			</span>
 			#for $reply in $r
 				<li>
 					$reply['reply-text']
