@@ -1,0 +1,25 @@
+#extends base
+
+#def title
+Viewing post number $post_num in $board.board_name
+#end def
+
+#def content
+<a href="/view_board/$board.key"><img src="/static/images/arrow-Left-24.png" alt="Back"> Back</a>
+
+<form action="/new_reply/" method="post">
+	<!--<input type="text" name="reply_text" size="10" />-->
+	<TEXTAREA NAME="reply_text" COLS=60 ROWS=6"></TEXTAREA><br>
+	<input type="hidden" name="board_key" value="$board.key">
+	<input type="hidden" name="post_num" value="$post_num">
+	<input type="submit" value="Reply" />
+</form>
+	<div class="message">
+		$board.posts[$post_num].message
+	</div>
+#for $reply in $board.posts[$post_num].replies
+	<div class="reply">
+		$reply['reply-text']
+	</div>
+#end for
+#end def

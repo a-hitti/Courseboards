@@ -1,24 +1,23 @@
 #This class attaches database calls to a normal list
     #User must supply the actions db_append, and db_delete, which both take in an object to be appended/deleted
 class DBList:
-    def __init__(self, post_list, db_append, db_delete):
+    def __init__(self, post_list, db_append, db_format=None):
         self.list = post_list
-        self.db_delete = db_delete
         self.db_append = db_append
+        #the format method is needed if you want to add some metadata like timestamp
+        #The use case is to change db_format as needed
+        self.db_format = db_format
 
     def __len__(self):
-        return post_list.len(self.post_list)
+        return len(self.list)
 
     def __getitem__(self, i):        
         return self.list[i]
 
-    def __delitem__(self, i):
-        #Delete the item from the database
-        self.db_delete(self.list[i])
-        del self.list[i]
-        #Delete the item from the server
-
     def append(self, item):
+        if self.db_format:
+            item = self.db_format(item)
+            
         self.db_append(item)
         #Add the thing to the server
         self.list.append(item)

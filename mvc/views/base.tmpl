@@ -1,0 +1,53 @@
+
+<html>
+	<head>
+		<title>
+		#def title
+		<!-- Override -->
+		#end def
+		$title
+		</title>
+		
+		<!-- Scripts -->
+		#def scripts
+		<!-- Override -->
+		#end def
+		$scripts
+		<!-- Scripts END -->
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+		#def css
+		<!-- Override -->
+		#end def
+		$css
+		<!-- CSS END -->
+		
+	</head>
+
+	<body>
+		<!-- Header -->
+		<div id="header">
+			<h1>CourseBoards</h1>
+			<h2>We need to have a talk!</h2>
+		</div>
+		<!-- Header END -->
+		
+		<!-- Content -->
+		#def content
+		<!-- Override -->
+		#end def
+		<div id="content">
+			$content
+		</div>
+		<!-- Content END -->
+
+
+		<!-- Footer -->
+		<div id="footer">
+			&copy; CourseBoards
+		</div>
+		<!-- Header END -->
+				
+	</body>
+</html>

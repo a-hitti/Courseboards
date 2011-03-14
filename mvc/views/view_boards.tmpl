@@ -1,0 +1,11 @@
+#extends base
+
+#def title
+Available Boards
+#end def
+
+#def content
+#for $board in $boards
+<a href="/view_board/$board.key">$board.board_name</a><br />
+#end for
+#end def
