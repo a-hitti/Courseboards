@@ -19,9 +19,3 @@ class Board:
         self.board_schedule = db.get_schedule(key)
         #Posts should be a list of Post objects
         self.posts = DBList(db.get_posts(key))
-
-
-
-        
-
-    

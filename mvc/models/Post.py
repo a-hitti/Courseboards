@@ -23,6 +23,3 @@ class Post:
     @message.setter(self, value):
         self._message = value
         #Insert value into database
-
-    
-    

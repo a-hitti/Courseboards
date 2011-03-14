@@ -1,4 +1,3 @@
-
 #Populate active boards every 5 minutes
 active_boards = {}
 
@@ -8,11 +7,9 @@ def check_boards():
         replacements = dict()
         replacements[board_key] = Board(board_key)
         active_boards = replacements
-        
     Timer(600.0, check_boards).start()
 
 check_boards()
-    
 
 #Controller code
 
@@ -30,4 +27,3 @@ def new_post(board_key, message):
 
 def new_reply(board_key, post_num, reply_text):
     active_boards[board_key].posts[post_num].append(reply_text)
-    
